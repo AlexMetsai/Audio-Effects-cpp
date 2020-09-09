@@ -6,6 +6,14 @@
  * Librady for reading/writing wav files: adamstark/AudioFile
  */
 
+#include <vector>
+#include <iostream>
+#include <string>
+#include "AudioFile.h"
+#include <cstring>
+
+AudioFile<double> delay_reverb(AudioFile<double> audioFile);
+
 int main(){
-    // TODO
+    //TODO
 }
