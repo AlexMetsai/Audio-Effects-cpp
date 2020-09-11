@@ -12,7 +12,7 @@
 #include "AudioFile.h"
 #include <cstring>
 
-AudioFile<double> delay_reverb(AudioFile<double> audioFile);
+AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds = 0.3, double decay = 0.5f);
 
 int main(){
     // Load wav file
@@ -27,11 +27,9 @@ int main(){
 }
 
 // Algorithmic Delay/Reverb.
-AudioFile<double> delay_reverb(AudioFile<double> audioFile){
-    // TODO: add decay and delay duration as parameters?
+AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds, double decay){
     // TODO: handle multiple channels
-    float delayMilliseconds = 0.3;
-    double decay = 0.5f;
+    
     int delaySamples = int(delayMilliseconds * audioFile.getSampleRate());
     
     std::cout << "Delay/Reverb effect using" << "delaySamples: " << 
