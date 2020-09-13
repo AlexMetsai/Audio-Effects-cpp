@@ -26,17 +26,20 @@ int main(){
     return 0;
 }
 
-// Algorithmic Delay/Reverb.
+// Algorithmic Delay/Reverb using a single delay line.
 AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds, double decay){
-    // TODO: handle multiple channels
     
     int delaySamples = int(delayMilliseconds * audioFile.getSampleRate());
+    int numChannels = audioFile.getNumChannels();
+    int channel;
     
     std::cout << "Delay/Reverb effect using" << "delaySamples: " << 
     delaySamples << " " << audioFile.getSampleRate() << " " << audioFile.getNumSamplesPerChannel() << std::endl;
     
     for (int i = 0; i < audioFile.getNumSamplesPerChannel() - delaySamples; i++){
-        audioFile.samples[0][i+delaySamples] += (double)((double)audioFile.samples[0][i] * decay);
+        for (channel = 0; channel < numChannels; channel ++){
+            audioFile.samples[channel][i+delaySamples] += (double)((double)audioFile.samples[channel][i] * decay);
+        }
     }
     
     return audioFile;
