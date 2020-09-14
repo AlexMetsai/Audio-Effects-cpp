@@ -13,15 +13,18 @@ int main(){
 
 AudioFile<double> combFilter(AudioFile<double> audioFile, double delayMilliseconds, double decay){
 
-    // Calculate the number of delay samples.
+    // Calculate the number of delay samples and the number of channels.
     int delaySamples = int(delayMilliseconds * (audioFile.getSampleRate()/1000));
-
+    int numChannels = audioFile.getNumChannels();
+    int channel;
+    
     // See if you need a separate copy of 'audioFile'.
     // temp = pseudocopy audioFile;
 
     for (int i = 0; i < audioFile.getNumSamplesPerChannel() - delaySamples; i++{
-        audioFile.samples[0][i+delaySamples] += (double)((double)audioFile.samples[0][i] * decay);
-        // DO THIS FOR ALL CHANNELS THAT THE WAV FILE PROVIDES.
+        for (channel = 0; channel < numChannels; channel ++){
+            audioFile.samples[channel][i+delaySamples] += (double)((double)audioFile.samples[channel][i] * decay);
+        }
     }
     return audioFile;
 }
