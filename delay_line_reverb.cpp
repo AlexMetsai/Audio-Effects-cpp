@@ -4,6 +4,7 @@
  * License will probably be GPLv3.
  *
  * Librady for reading/writing wav files: adamstark/AudioFile
+ * TODO: add functionality for adjusting dry/wet ratio (current setting is 100% wet).
  */
 
 #include <vector>
