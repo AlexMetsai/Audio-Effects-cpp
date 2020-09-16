@@ -18,7 +18,7 @@
 // Implemented the more sophisticated reverb algorithm proposed by Manfred Schroeder.
 // This approach makes used of Comb and All-Pass filters.
 
-AudioFile<double> combFilter(AudioFile<double> audioFile, double delayMilliseconds, double decay);
+AudioFile<double> combFilter(AudioFile<double> audioFile, double delayMilliseconds = 0.3, double decay = 0.5f);
 
 void allPassFilter();
 
