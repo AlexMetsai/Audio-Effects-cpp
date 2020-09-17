@@ -26,10 +26,31 @@
 
 AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds = 0.3, double decay = 0.5f);
 
-int main(){
+int main(int argc, char **argv){
+    
+   char *input = NULL;
+   int c;
+
+   if (argc <= 2){
+       std::cout << "You have to specify the wav file that will be processed." << std::endl;
+       return -1;
+   }
+
+   while((c = getopt(argc, argv, "i:")) != -1)
+       switch (c){
+           case 'i':
+               input = optarg;
+               break;
+           case '?':
+               fprintf(stderr, "Unknown argument -%c .\n", optopt);
+               return 1;
+           default:
+               abort();
+       }
+    
     // Load wav file
     AudioFile<double> audioFile;
-    audioFile.load("input.wav");
+    audioFile.load(input);
     
     // Apply Reverb effect.
     audioFile = delay_reverb(audioFile);
