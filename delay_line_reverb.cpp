@@ -23,6 +23,7 @@
 #include <string>
 #include "AudioFile.h"
 #include <cstring>
+#inlcude <unistd.h>
 
 AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds = 0.3, double decay = 0.5f);
 
