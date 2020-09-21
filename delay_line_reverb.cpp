@@ -31,6 +31,7 @@ int main(int argc, char **argv){
     
    char *input = NULL;
    int c;
+   double mix = 0.5;
 
    if (argc <= 2){
        std::cout << "You have to specify the wav file that will be processed." << std::endl;
@@ -50,11 +51,20 @@ int main(int argc, char **argv){
        }
     
     // Load wav file
-    AudioFile<double> audioFile;
+    AudioFile<double> audioFile, effect;
     audioFile.load(input);
     
     // Apply Reverb effect.
-    audioFile = delay_reverb(audioFile);
+    effect = delay_reverb(audioFile);
+    
+    // Adjust Dry/Wet mix.
+    for (int i = 0; i < audioFile.getNumSamplesPerChannel(); i++){
+        for (int channel = 0; channel < audioFile.getNumChannels(); channel++){
+            audioFile.samples[channel][i] += (1 - mix) * audioFile.samples[channel][i] + mix * effect.samples[channel][i];
+		}
+    }
+    
+    // Save output to file.
     audioFile.save("output.wav");
     
     return 0;
