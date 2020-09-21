@@ -25,6 +25,35 @@ void allPassFilter();
 AudioFile<double> schroeder_reverb(AudioFile<double> audioFile);
 
 int main(){
+   
+   char *input = NULL;
+   int c;
+   double mix = 0.5;
+
+   if (argc <= 2){
+       std::cout << "You have to specify the wav file that will be processed." << std::endl;
+       return -1;
+   }
+
+   while((c = getopt(argc, argv, "i:")) != -1)
+       switch (c){
+           case 'i':
+               input = optarg;
+               break;
+           case '?':
+               fprintf(stderr, "Unknown argument -%c .\n", optopt);
+               return 1;
+           default:
+               abort();
+       }
+    
+    // Load wav file
+    AudioFile<double> audioFile, effect;
+    audioFile.load(input);
+    
+    // Apply reverb
+    // TODO
+    
     return 0;
 }
 
