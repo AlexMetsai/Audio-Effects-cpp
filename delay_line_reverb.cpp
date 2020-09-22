@@ -77,7 +77,7 @@ AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseco
     int numChannels = audioFile.getNumChannels();
     int channel;
     
-    std::cout << "Delay/Reverb effect using" << "delaySamples: " << 
+    std::cout << "Delay/Reverb effect using " << "delaySamples: " << 
     delaySamples << " " << audioFile.getSampleRate() << " " << audioFile.getNumSamplesPerChannel() << std::endl;
     
     for (int i = 0; i < audioFile.getNumSamplesPerChannel() - delaySamples; i++){
