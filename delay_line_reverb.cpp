@@ -25,37 +25,70 @@
 #include <cstring>
 #include <unistd.h>
 
-AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds = 0.3, double decay = 0.5f);
+AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds, double decay);
 
 int main(int argc, char **argv){
     
-   char *input = NULL;
-   int c;
-   double mix = 0.5;
+    char *input = NULL;
+    char *output = NULL;
+    int c;
+    
+    // Default values for delay-ms, decay and dry/wet mix.
+    float delayMilliseconds = 300;
+    double decay = 0.5;
+    double mix = 0.5;
+    
+    if (argc <= 2){
+        std::cout << "Delay line Reverb. Input filename is required.\n"
+	             "Options are:\n"
+		     "    -i: input audio filename\n"
+		     "    -t: Delay Milliseconds (default: 300)\n"
+		     "    -d: Decay value        (default: 0.5)\n"
+		     "    -m: Dry/Wet mix ratio  (default: 0.5)\n"
+		     "    -o: output filename    (default: output.wav)\n";
+        return -1;
+    }
 
-   if (argc <= 2){
-       std::cout << "You have to specify the wav file that will be processed." << std::endl;
-       return -1;
-   }
-
-   while((c = getopt(argc, argv, "i:")) != -1)
+    while((c = getopt(argc, argv, "i:t:d:m:o:")) != -1)
        switch (c){
            case 'i':
                input = optarg;
-               break;
+               continue;
+	   case 't':
+	       std::cout<<optarg;
+	       delayMilliseconds = std::stof(optarg);
+	       continue;
+	   case 'd':
+	       decay = std::stod(optarg);
+	       continue;
+	   case 'm':
+	       mix = std::stod(optarg);
+	       continue;
+	   case 'o':
+	       output = optarg;
+	       continue;
            case '?':
                fprintf(stderr, "Unknown argument -%c .\n", optopt);
                return 1;
            default:
                abort();
        }
-    
+       
+    if (input == NULL){
+        std::cout << "You have to specify the wav file that will be processed." << std::endl;
+        return -1;
+    }
+    if (output == NULL){
+        output = new char[10];
+	std::strcpy(output, "output.wav");
+    }
+
     // Load wav file
     AudioFile<double> audioFile, effect;
     audioFile.load(input);
     
     // Apply Reverb effect.
-    effect = delay_reverb(audioFile);
+    effect = delay_reverb(audioFile, delayMilliseconds, decay);
     
     // Adjust Dry/Wet mix.
     for (int i = 0; i < audioFile.getNumSamplesPerChannel(); i++){
@@ -65,7 +98,7 @@ int main(int argc, char **argv){
     }
     
     // Save output to file.
-    audioFile.save("output.wav");
+    audioFile.save(output);
     
     return 0;
 }
@@ -73,7 +106,7 @@ int main(int argc, char **argv){
 // Algorithmic Delay/Reverb using a single delay line.
 AudioFile<double> delay_reverb(AudioFile<double> audioFile, float delayMilliseconds, double decay){
     
-    int delaySamples = int(delayMilliseconds * audioFile.getSampleRate());
+    int delaySamples = int(delayMilliseconds * audioFile.getSampleRate() / 1000);
     int numChannels = audioFile.getNumChannels();
     int channel;
     
