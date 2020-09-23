@@ -96,8 +96,18 @@ int main(int argc, char **argv){
 		}
     }
     
-    // TODO: normalize data to avoid cases of audio clipping.
-    //
+    // I encountered distortion / audio-cliiping on pure-tone waves, especially for pure sine waves.
+    // This happens because some values, due to the added delay, exceed the accepted range of [-1, 1].
+    // A simple way to tackle this is multiplying all values with (1 / max_val), where max_val is the largest sample.
+    for (int channel = 0; channel < audioFile.getNumChannels(); channel++){
+        double max_val = audioFile.samples[channel][0];
+
+        for (int i = 0; i < audioFile.getNumSamplesPerChannel(); i++)
+           if (abs(audioFile.samples[channel][i]) > max_val) max_val = abs(audioFile.samples[channel][i]);
+
+        for (int i = 0; i < audioFile.getNumSamplesPerChannel(); i++)
+            audioFile.samples[channel][i] =  audioFile.samples[channel][i] * (1 / max_val);
+    }
     
     // Save output to file.
     audioFile.save(output);
