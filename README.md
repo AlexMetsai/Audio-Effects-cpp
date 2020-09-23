@@ -6,7 +6,7 @@ This code relies on the header file provided by https://github.com/adamstark/Aud
 
 Compile with:
 ******************************
-g++ reverb.cpp -std=c++11 -fpermissive
+g++ reverb.cpp -std=c++11
 ******************************
 
 Example run:
