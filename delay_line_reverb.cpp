@@ -16,7 +16,6 @@
  */
 
 // Librady for reading/writing wav files: adamstark/AudioFile
-// TODO: add functionality for adjusting dry/wet ratio (current setting is 100% wet).
 
 #include <vector>
 #include <iostream>
@@ -96,6 +95,9 @@ int main(int argc, char **argv){
             audioFile.samples[channel][i] += (1 - mix) * audioFile.samples[channel][i] + mix * effect.samples[channel][i];
 		}
     }
+    
+    // TODO: normalize data to avoid cases of audio clipping.
+    //
     
     // Save output to file.
     audioFile.save(output);
